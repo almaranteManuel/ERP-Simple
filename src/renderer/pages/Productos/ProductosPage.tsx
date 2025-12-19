@@ -29,7 +29,8 @@ export function ProductosPage() {
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-4 py-3 text-left">Nombre</th>
+              <th className="px-4 py-3 text-left">Código</th>
+              <th className="px-4 py-3 text-left">Descripción</th>
               <th className="px-4 py-3 text-left">Precio</th>
               <th className="px-4 py-3 text-left">Stock</th>
               <th className="px-4 py-3 text-left">Proveedor</th>
@@ -39,10 +40,11 @@ export function ProductosPage() {
           <tbody>
             {productos.map(producto => (
               <tr key={producto.id} className="border-t">
-                <td className="px-4 py-3">{producto.nombre}</td>
+                <td className="px-4 py-3">{producto.codigo}</td>
+                <td className="px-4 py-3">{producto.descripcion || '-'}</td>
                 <td className="px-4 py-3">${producto.precio}</td>
                 <td className="px-4 py-3">
-                  <span className={producto.stock <= producto.stockMinimo ? 'text-red-600 font-bold' : ''}>
+                  <span className={producto.stock <= 10 ? 'text-red-600 font-bold' : ''}>
                     {producto.stock}
                   </span>
                 </td>

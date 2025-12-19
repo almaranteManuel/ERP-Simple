@@ -6,20 +6,22 @@ export type ProductoConProveedor = Producto & {
 };
 
 export interface CreateProductoDTO {
-  nombre: string;
+  codigo: string;
   descripcion?: string;
   precio: number;
+  precio_propio?: number;
   stock: number;
-  stockMinimo: number;
+  variante?: number;
   proveedorId?: number;
 }
 
 export interface UpdateProductoDTO {
-  nombre?: string;
+  codigo?: string;
   descripcion?: string;
   precio?: number;
+  precio_propio?: number;
   stock?: number;
-  stockMinimo?: number;
+  variante?: number;
   proveedorId?: number;
 }
 
@@ -30,11 +32,11 @@ declare global {
       producto: {
         getAll: () => Promise<ProductoConProveedor[]>;
         getById: (id: number) => Promise<ProductoConProveedor | null>;
-        create: (data: CreateProductoDTO) => Promise<Producto>;
-        update: (id: number, data: UpdateProductoDTO) => Promise<Producto>;
-        delete: (id: number) => Promise<Producto>;
-        search: (query: string) => Promise<Producto>;
-        getLowStock: () => Promise<Producto>;
+        create: (data: CreateProductoDTO) => Promise<ProductoConProveedor>;
+        update: (id: number, data: UpdateProductoDTO) => Promise<ProductoConProveedor>;
+        delete: (id: number) => Promise<void>;
+        search: (query: string) => Promise<ProductoConProveedor[]>;
+        getLowStock: () => Promise<ProductoConProveedor[]>;
       };
     };
   }

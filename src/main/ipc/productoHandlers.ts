@@ -57,7 +57,7 @@ export function registerProductoHandlers() {
   // Buscar productos
   ipcMain.handle('producto:search', async (_, query: string) => {
     try {
-      return await productoService.searchByName(query);
+      return await productoService.searchByCode(query);
     } catch (error) {
       console.error('Error en producto:search', error);
       throw error;

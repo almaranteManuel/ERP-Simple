@@ -9,7 +9,7 @@ export class ProductoService {
           proveedor: true,
         },
         orderBy: {
-          nombre: 'asc',
+          codigo: 'asc',
         },
       });
     } catch (error) {
@@ -33,11 +33,12 @@ export class ProductoService {
   }
 
   async create(data: {
-    nombre: string;
+    codigo: string;
     descripcion?: string;
     precio: number;
+    precio_propio?: number;
     stock: number;
-    stockMinimo: number;
+    variante?: number;
     proveedorId?: number;
   }): Promise<Producto> {
     try {
@@ -56,11 +57,12 @@ export class ProductoService {
   async update(
     id: number,
     data: {
-      nombre?: string;
+      codigo?: string;
       descripcion?: string;
       precio?: number;
+      precio_propio?: number;
       stock?: number;
-      stockMinimo?: number;
+      variante?: number;
       proveedorId?: number;
     }
   ): Promise<Producto> {
@@ -89,11 +91,11 @@ export class ProductoService {
     }
   }
 
-  async searchByName(query: string): Promise<Producto[]> {
+  async searchByCode(query: string): Promise<Producto[]> {
     try {
       return await prisma.producto.findMany({
         where: {
-          nombre: {
+          codigo: {
             contains: query,
           },
         },
@@ -109,14 +111,19 @@ export class ProductoService {
 
   async getLowStock(): Promise<Producto[]> {
     try {
-      // Prisma doesn't support column-to-column comparisons in filters,
-      // so fetch and filter in JavaScript.
+      // Para SQLite, necesitas traer todos y filtrar en memoria
+      // O usar un valor fijo como umbral
       const products = await prisma.producto.findMany({
+        where: {
+          stock: {
+            lte: 10, // Umbral fijo de 10 unidades
+          },
+        },
         include: {
           proveedor: true,
         },
       });
-      return products.filter((p) => p.stock <= p.stockMinimo);
+      return products;
     } catch (error) {
       console.error('Error al obtener productos con stock bajo:', error);
       throw new Error('No se pudieron cargar los productos con stock bajo');
