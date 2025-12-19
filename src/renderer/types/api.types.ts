@@ -25,6 +25,22 @@ export interface UpdateProductoDTO {
   proveedorId?: number;
 }
 
+export type Proveedore = Proveedor;
+
+export interface CreateProveedorDTO {
+  nombre: string;
+  telefono?: string;
+  email: string;
+  direccion?: string;
+}
+
+export interface UpdateProveedorDTO {
+  nombre?: string;
+  telefono?: string;
+  email?: string;
+  direccion?: string;
+}
+
 // Extender el objeto window con tu API
 declare global {
   interface Window {
@@ -37,6 +53,14 @@ declare global {
         delete: (id: number) => Promise<void>;
         search: (query: string) => Promise<ProductoConProveedor[]>;
         getLowStock: () => Promise<ProductoConProveedor[]>;
+      };
+      proveedor: {
+        getAll: () => Promise<Proveedore[]>;
+        getById: (id: number) => Promise<Proveedore | null>;
+        create: (data: CreateProveedorDTO) => Promise<Proveedore>;
+        update: (id: number, data: UpdateProveedorDTO) => Promise<Proveedore>;
+        delete: (id: number) => Promise<void>;
+        search: (query: string) => Promise<Proveedore[]>;
       };
     };
   }

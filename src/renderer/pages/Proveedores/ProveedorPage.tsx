@@ -1,48 +1,46 @@
-// pages/ProductosPage.tsx
+// pages/ProveedorPage.tsx
 import React, { useState } from 'react';
-import { ProductoModal } from '../../pages/Productos/ProductoModal';
-import { Producto } from '../../types/index';
-import { useProductos } from '../../hooks/useProductos';
-import { ProductoConProveedor } from '../../types/api.types';
+import { Proveedor } from '../../types/index';
+import { useProveedores } from '../../hooks/useProveedores';
+import { ProveedorModal } from './ProveedorModal';
 
-
-export function ProductosPage() {
-  const { productos, loading, createProducto, updateProducto, deleteProducto, refresh } = useProductos();
+export function ProveedorPage() {
+  const { proveedores, loading, createProveedor, updateProveedor, deleteProveedor, refresh } = useProveedores();
   const [showModal, setShowModal] = useState(false);
-  const [editingProducto, setEditingProducto] = useState<Producto | null>(null);
+  const [editingProveedor, setEditingProveedor] = useState<Proveedor | null>(null);
 
   const handleCreate = async (data: any) => {
-    await createProducto(data);
+    await createProveedor(data);
     await refresh();
   };
 
   const handleUpdate = async (data: any) => {
-    if (editingProducto) {
-      await updateProducto(editingProducto.id, data);
+    if (editingProveedor) {
+      await updateProveedor(editingProveedor.id, data);
       await refresh();
     }
   };
 
   const handleDelete = async (id: number) => {
-    if (confirm('¿Estás seguro de eliminar este producto?')) {
-      await deleteProducto(id);
+    if (confirm('¿Estás seguro de eliminar este proveedor?')) {
+      await deleteProveedor(id);
       await refresh();
     }
   };
 
-  const handleEdit = (producto: ProductoConProveedor) => {
-    setEditingProducto(producto as Producto);
+  const handleEdit = (proveedor: Proveedor) => {
+    setEditingProveedor(proveedor as Proveedor);
     setShowModal(true);
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
-    setEditingProducto(null);
+    setEditingProveedor(null);
   };
 
   if (loading) return (
     <div className="flex items-center justify-center h-full">
-      <div className="text-gray-500">Cargando productos...</div>
+      <div className="text-gray-500">Cargando proveedores...</div>
     </div>
   );
 
@@ -51,15 +49,15 @@ export function ProductosPage() {
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Productos</h1>
-          <p className="text-gray-600">Gestión de productos del inventario</p>
+          <h1 className="text-2xl font-bold text-gray-800">Proveedores</h1>
+          <p className="text-gray-600">Gestión de proveedores</p>
         </div>
         <button
           onClick={() => setShowModal(true)}
           className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center space-x-2"
         >
           <span>+</span>
-          <span>Nuevo Producto</span>
+          <span>Nuevo Proveedor</span>
         </button>
       </div>
 
@@ -70,19 +68,16 @@ export function ProductosPage() {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Código
+                  Nombre
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Descripción
+                  Telefono
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Precio
+                  Dirección
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Stock
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Proveedor
+                  Email
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Acciones
@@ -90,44 +85,35 @@ export function ProductosPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {productos.map(producto => (
-                <tr key={producto.id} className="hover:bg-gray-50">
+              {proveedores.map(proveedor => (
+                <tr key={proveedor.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="font-medium text-gray-900">{producto.codigo}</span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="text-gray-700">{producto.descripcion || '-'}</span>
+                    <span className="font-medium text-gray-900">{proveedor.nombre}</span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="font-medium text-gray-900">
-                      ${producto.precio.toFixed(2)}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      producto.stock <= 10 
-                        ? 'bg-red-100 text-red-800' 
-                        : producto.stock <= 20 
-                        ? 'bg-yellow-100 text-yellow-800' 
-                        : 'bg-green-100 text-green-800'
-                    }`}>
-                      {producto.stock}
+                      {proveedor.telefono}
                     </span>
                   </td>
                   <td className="px-6 py-4">
                     <span className="text-gray-600">
-                      {producto.proveedor?.nombre || 'Sin proveedor'}
+                      {proveedor.direccion || 'Sin direccion'}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className="text-gray-600">
+                      {proveedor.email || 'Sin email'}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <button
-                      onClick={() => handleEdit(producto)}
+                      onClick={() => handleEdit(proveedor)}
                       className="text-blue-600 hover:text-blue-900 mr-4"
                     >
                       Editar
                     </button>
                     <button
-                      onClick={() => handleDelete(producto.id)}
+                      onClick={() => handleDelete(proveedor.id)}
                       className="text-red-600 hover:text-red-900"
                     >
                       Eliminar
@@ -139,19 +125,19 @@ export function ProductosPage() {
           </table>
         </div>
 
-        {productos.length === 0 && (
+        {proveedores.length === 0 && (
           <div className="text-center py-8 text-gray-500">
-            No hay productos registrados
+            No hay proveedores registrados
           </div>
         )}
       </div>
 
       {/* Modal */}
-      <ProductoModal
+      <ProveedorModal
         isOpen={showModal}
         onClose={handleCloseModal}
-        onSubmit={editingProducto ? handleUpdate : handleCreate}
-        initialData={editingProducto}
+        onSubmit={editingProveedor ? handleUpdate : handleCreate}
+        initialData={editingProveedor}
       />
     </div>
   );

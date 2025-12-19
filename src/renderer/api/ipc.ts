@@ -9,6 +9,15 @@ export const productoApi = {
   getLowStock: () => window.api.producto.getLowStock(),
 };
 
+export const proveedorApi = {
+  getAll: () => window.api.proveedor.getAll(),
+  getById: (id: number) => window.api.proveedor.getById(id),
+  create: (data: any) => window.api.proveedor.create(data),
+  update: (id: number, data: any) => window.api.proveedor.update(id, data),
+  delete: (id: number) => window.api.proveedor.delete(id),
+  search: (query: string) => window.api.proveedor.search(query),
+};
+
 // Exportar otros módulos cuando los implementes
 // export const proveedorApi = { ... };
 // export const compraApi = { ... };

@@ -1,17 +1,20 @@
+// hooks/useProductos.ts
 import { useState, useEffect } from 'react';
-import { productoApi } from '../api/ipc';
 import { ProductoConProveedor } from '../types/api.types';
 
 export function useProductos() {
-  const [productos, setProductos] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [productos, setProductos] = useState<ProductoConProveedor[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    loadProductos();
+  }, []);
 
   const loadProductos = async () => {
-    setLoading(true);
-    setError(null);
     try {
-      const data = await productoApi.getAll();
+      setLoading(true);
+      const data = await window.api.producto.getAll();
       setProductos(data);
     } catch (err) {
       setError('Error al cargar productos');
@@ -23,49 +26,37 @@ export function useProductos() {
 
   const createProducto = async (data: any) => {
     try {
-      const nuevo = await productoApi.create(data);
-      setProductos(prev => [...prev, nuevo]);
-      return nuevo;
+      const result = await window.api.producto.create(data);
+      return result;
     } catch (err) {
-      setError('Error al crear producto');
       throw err;
     }
   };
 
   const updateProducto = async (id: number, data: any) => {
     try {
-      const actualizado = await productoApi.update(id, data);
-      setProductos(prev => 
-        prev.map(p => p.id === id ? actualizado : p)
-      );
-      return actualizado;
+      const result = await window.api.producto.update(id, data);
+      return result;
     } catch (err) {
-      setError('Error al actualizar producto');
       throw err;
     }
   };
 
   const deleteProducto = async (id: number) => {
     try {
-      await productoApi.delete(id);
-      setProductos(prev => prev.filter(p => p.id !== id));
+      await window.api.producto.delete(id);
     } catch (err) {
-      setError('Error al eliminar producto');
       throw err;
     }
   };
-
-  useEffect(() => {
-    loadProductos();
-  }, []);
 
   return {
     productos,
     loading,
     error,
-    loadProductos,
     createProducto,
     updateProducto,
     deleteProducto,
+    refresh: loadProductos
   };
 }
