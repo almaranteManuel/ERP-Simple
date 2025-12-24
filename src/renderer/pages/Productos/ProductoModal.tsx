@@ -54,17 +54,30 @@ export function ProductoModal({ isOpen, onClose, onSubmit, initialData }: Produc
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     
+    // CASO 1: Inputs numéricos (stock, precio)
     if (type === 'number') {
       setFormData(prev => ({
         ...prev,
         [name]: value === '' ? 0 : parseFloat(value)
       }));
-    } else {
+      return; // Importante: salir de la función aquí
+    } 
+
+    // CASO 2: El Select de Proveedor (LA SOLUCIÓN)
+    if (name === 'proveedorId') {
       setFormData(prev => ({
         ...prev,
-        [name]: value
+        // Si el valor es vacío "", enviamos null. Si no, lo convertimos a Entero.
+        [name]: value === "" ? null : parseInt(value, 10)
       }));
+      return;
     }
+
+    // CASO 3: Resto de campos (texto)
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -210,7 +223,7 @@ export function ProductoModal({ isOpen, onClose, onSubmit, initialData }: Produc
                 </label>
                 <select
                   name="proveedorId"
-                  value={formData.proveedorId || ''}
+                  value={formData.proveedorId || null}
                   onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >

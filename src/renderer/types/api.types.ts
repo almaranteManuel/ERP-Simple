@@ -1,4 +1,4 @@
-import { Producto, Proveedor } from '@prisma/client';
+import { Producto, Proveedor, Venta } from '@prisma/client';
 
 // Tipos para el frontend
 export type ProductoConProveedor = Producto & {
@@ -41,6 +41,22 @@ export interface UpdateProveedorDTO {
   direccion?: string;
 }
 
+export type VentaConProducto = Venta & {
+  producto?: Producto | null;
+};
+
+export interface CreateVentaDTO {
+  fecha: Date;
+  total?: number;
+  productoId: number;
+}
+
+export interface UpdateVentaDTO {
+  fecha: Date;
+  total?: number;
+  productoId: number;
+}
+
 // Extender el objeto window con tu API
 declare global {
   interface Window {
@@ -61,6 +77,14 @@ declare global {
         update: (id: number, data: UpdateProveedorDTO) => Promise<Proveedore>;
         delete: (id: number) => Promise<void>;
         search: (query: string) => Promise<Proveedore[]>;
+      };
+      venta: {
+        getAll: () => Promise<VentaConProducto[]>;
+        getById: (id: number) => Promise<VentaConProducto | null>;
+        create: (data: CreateVentaDTO) => Promise<VentaConProducto>;
+        update: (id: number, data: UpdateVentaDTO) => Promise<VentaConProducto>;
+        delete: (id: number) => Promise<void>;
+        search: (query: string) => Promise<VentaConProducto[]>;
       };
     };
   }

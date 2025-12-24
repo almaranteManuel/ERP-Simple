@@ -4,6 +4,7 @@ import { Routes, Route, HashRouter } from 'react-router-dom';
 import Sidebar from './components/Layout/Sidebar';
 import { ProductosPage } from './pages/Productos/ProductosPage';
 import { ProveedorPage } from './pages/Proveedores/ProveedorPage';
+import { VentaPage } from './pages/Ventas/VentaPage';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Routes>
             <Route path="/productos" element={<ProductosPage />} />
             <Route path="/proveedores" element={<ProveedorPage />} />
+            <Route path="/ventas" element={<VentaPage />} />
             {/* Agrega una ruta por defecto */}
             <Route path="/" element={
               <div className="p-6">

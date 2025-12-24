@@ -23,3 +23,13 @@ export interface Proveedor {
   createdAt: Date; 
   updatedAt: Date;
 }
+
+export interface Venta {
+  id: number;
+  fecha: Date;
+  total?: number;
+  productoId: number;
+  producto?: Producto;
+  createdAt: Date; 
+  updatedAt: Date;
+}

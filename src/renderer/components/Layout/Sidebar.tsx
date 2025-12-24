@@ -1,6 +1,7 @@
 // components/Layout/Sidebar.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { HomeModernIcon, RocketLaunchIcon, ShoppingCartIcon, TruckIcon } from '@heroicons/react/24/solid'
 
 const Sidebar: React.FC = () => {
   return (
@@ -16,15 +17,15 @@ const Sidebar: React.FC = () => {
           to="/" 
           className="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
         >
-          <span className="mr-3">🏠</span>
-          <span>Dashboard</span>
+          <span className="mr-3"><HomeModernIcon className="size-6 text-blue-500" /></span>
+          <span>Inicio</span>
         </Link>
         
         <Link 
           to="/productos" 
           className="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
         >
-          <span className="mr-3">📦</span>
+          <span className="mr-3"><RocketLaunchIcon className="size-6 text-blue-500" /></span>
           <span>Productos</span>
         </Link>
 
@@ -32,8 +33,16 @@ const Sidebar: React.FC = () => {
           to="/proveedores" 
           className="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
         >
-          <span className="mr-3">📦</span>
+          <span className="mr-3"><TruckIcon className="size-6 text-blue-500" /></span>
           <span>Proveedores</span>
+        </Link>
+
+        <Link 
+          to="/ventas" 
+          className="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
+        >
+          <span className="mr-3"><ShoppingCartIcon className="size-6 text-blue-500" /></span>
+          <span>Ventas</span>
         </Link>
         
         {/* Agrega más items aquí */}

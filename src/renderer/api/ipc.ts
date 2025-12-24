@@ -18,6 +18,14 @@ export const proveedorApi = {
   search: (query: string) => window.api.proveedor.search(query),
 };
 
+export const ventaApi = {
+  getAll: () => window.api.venta.getAll(),
+  getById: (id: number) => window.api.venta.getById(id),
+  create: (data: any) => window.api.venta.create(data),
+  update: (id: number, data: any) => window.api.venta.update(id, data),
+  delete: (id: number) => window.api.venta.delete(id),
+};
+
 // Exportar otros módulos cuando los implementes
 // export const proveedorApi = { ... };
 // export const compraApi = { ... };
