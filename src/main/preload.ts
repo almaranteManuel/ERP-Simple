@@ -29,7 +29,14 @@ contextBridge.exposeInMainWorld('api', {
     update: (id: number, data: any) => ipcRenderer.invoke('venta:update', id, data),
     delete: (id: number) => ipcRenderer.invoke('venta:delete', id),
   },
-  
+  // Compras
+  compra: {
+    getAll: () => ipcRenderer.invoke('compra:getAll'),
+    getById: (id: number) => ipcRenderer.invoke('compra:getById', id),
+    create: (data: any) => ipcRenderer.invoke('compra:create', data),
+    update: (id: number, data: any) => ipcRenderer.invoke('compra:update', id, data),
+    delete: (id: number) => ipcRenderer.invoke('compra:delete', id),
+  },
   
   // Agregar otros módulos aquí cuando los implementes
   // proveedor: { ... },

@@ -26,6 +26,14 @@ export const ventaApi = {
   delete: (id: number) => window.api.venta.delete(id),
 };
 
+export const compraApi = {
+  getAll: () => window.api.compra.getAll(),
+  getById: (id: number) => window.api.compra.getById(id),
+  create: (data: any) => window.api.compra.create(data),
+  update: (id: number, data: any) => window.api.compra.update(id, data),
+  delete: (id: number) => window.api.compra.delete(id),
+};
+
 // Exportar otros módulos cuando los implementes
 // export const proveedorApi = { ... };
 // export const compraApi = { ... };
