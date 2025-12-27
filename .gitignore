@@ -93,5 +93,8 @@ out/
 
 /generated/prisma
 
-/prisma
-/src/main/database
+# Prisma
+/prisma/
+
+# Base de datos local
+/src/main/database/
