@@ -5,6 +5,7 @@ import Sidebar from './components/Layout/Sidebar';
 import { ProductosPage } from './pages/Productos/ProductosPage';
 import { ProveedorPage } from './pages/Proveedores/ProveedorPage';
 import { VentaPage } from './pages/Ventas/VentaPage';
+import { CompraPage } from './pages/Compras/CompraPage';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/productos" element={<ProductosPage />} />
             <Route path="/proveedores" element={<ProveedorPage />} />
             <Route path="/ventas" element={<VentaPage />} />
+            <Route path="/compras" element={<CompraPage />} />
             {/* Agrega una ruta por defecto */}
             <Route path="/" element={
               <div className="p-6">

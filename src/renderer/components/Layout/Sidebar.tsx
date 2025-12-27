@@ -1,7 +1,7 @@
 // components/Layout/Sidebar.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { HomeModernIcon, RocketLaunchIcon, ShoppingCartIcon, TruckIcon } from '@heroicons/react/24/solid'
+import { HomeModernIcon, RocketLaunchIcon, ShoppingCartIcon, TruckIcon, WalletIcon } from '@heroicons/react/24/solid'
 
 const Sidebar: React.FC = () => {
   return (
@@ -43,6 +43,14 @@ const Sidebar: React.FC = () => {
         >
           <span className="mr-3"><ShoppingCartIcon className="size-6 text-blue-500" /></span>
           <span>Ventas</span>
+        </Link>
+
+        <Link 
+          to="/compras" 
+          className="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
+        >
+          <span className="mr-3"><WalletIcon className="size-6 text-blue-500" /></span>
+          <span>Compras</span>
         </Link>
         
         {/* Agrega más items aquí */}

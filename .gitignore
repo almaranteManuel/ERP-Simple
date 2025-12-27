@@ -91,10 +91,15 @@ typings/
 # Electron-Forge
 out/
 
-/generated/prisma
+# Prisma generated client (si lo usás fuera de node_modules)
+prisma/generated/
 
-# Prisma
-/prisma/
+# Prisma local databases
+*.db
+*.db-journal
 
-# Base de datos local
+# SQLite local database
 /src/main/database/
+*.sqlite
+*.sqlite3
+

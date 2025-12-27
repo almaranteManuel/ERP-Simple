@@ -1,10 +1,10 @@
-// pages/VentaPage.tsx
+// pages/CompraPage.tsx
 import React, { useState } from 'react';
 import { Compra } from '../../types/index';
 import { useCompras } from '../../hooks/useCompras';
 import { CompraModal } from './CompraModal';
 
-export function VentaPage() {
+export function CompraPage() {
   const { compras, loading, createCompra, updateCompra, deleteCompra, refresh } = useCompras();
   const [showModal, setShowModal] = useState(false);
   const [editingCompra, setEditingCompra] = useState<Compra | null>(null);
