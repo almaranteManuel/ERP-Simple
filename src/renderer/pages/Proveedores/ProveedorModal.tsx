@@ -1,13 +1,13 @@
 // components/modals/ProductoModal.tsx
 import React, { useEffect, useState } from 'react';
 import { useProveedores } from '../../hooks/useProveedores';
-import { Proveedor } from '../../types/index';
+import { CreateProveedorDTO } from '../../types/api.types';
 
 interface ProveedorModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (data: any) => Promise<void>;
-  initialData?: Proveedor | null;
+  initialData?: CreateProveedorDTO | null;
 }
 
 export function ProveedorModal({ isOpen, onClose, onSubmit, initialData }: ProveedorModalProps) {

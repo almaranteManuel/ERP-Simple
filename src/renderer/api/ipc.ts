@@ -5,8 +5,10 @@ export const productoApi = {
   create: (data: any) => window.api.producto.create(data),
   update: (id: number, data: any) => window.api.producto.update(id, data),
   delete: (id: number) => window.api.producto.delete(id),
+  getLowStock: () => window.api.producto.getStockBajo(),
+  getByBarcode: (barcode: string) => window.api.producto.getByBarcode(barcode),
+  getByCodigo: (codigo: string) => window.api.producto.getByCodigo(codigo),
   search: (query: string) => window.api.producto.search(query),
-  getLowStock: () => window.api.producto.getLowStock(),
 };
 
 export const proveedorApi = {

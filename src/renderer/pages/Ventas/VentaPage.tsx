@@ -1,13 +1,13 @@
 // pages/VentaPage.tsx
 import React, { useState } from 'react';
-import { Venta } from '../../types/index';
 import { useVentas } from '../../hooks/useVentas';
 import { VentaModal } from './VentaModal';
+import { VentaCompleta } from '../../types/api.types';
 
 export function VentaPage() {
   const { ventas, loading, createVenta, updateVenta, deleteVenta, refresh } = useVentas();
   const [showModal, setShowModal] = useState(false);
-  const [editingVenta, setEditingVenta] = useState<Venta | null>(null);
+  const [editingVenta, setEditingVenta] = useState<VentaCompleta | null>(null);
 
   const handleCreate = async (data: any) => {
     await createVenta(data);
@@ -28,8 +28,8 @@ export function VentaPage() {
     }
   };
 
-  const handleEdit = (venta: Venta) => {
-    setEditingVenta(venta as Venta);
+  const handleEdit = (venta: VentaCompleta) => {
+    setEditingVenta(venta as VentaCompleta);
     setShowModal(true);
   };
 
@@ -94,7 +94,7 @@ export function VentaPage() {
                   </td>
                   <td className="px-6 py-4">
                     <span className="text-gray-600">
-                      {venta.producto?.descripcion || '-'}
+                      ...
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">

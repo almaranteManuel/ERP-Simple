@@ -1,13 +1,13 @@
 // pages/CompraPage.tsx
 import React, { useState } from 'react';
-import { Compra } from '../../types/index';
 import { useCompras } from '../../hooks/useCompras';
 import { CompraModal } from './CompraModal';
+import { CompraCompleta } from '../../types/api.types';
 
 export function CompraPage() {
   const { compras, loading, createCompra, updateCompra, deleteCompra, refresh } = useCompras();
   const [showModal, setShowModal] = useState(false);
-  const [editingCompra, setEditingCompra] = useState<Compra | null>(null);
+  const [editingCompra, setEditingCompra] = useState<CompraCompleta | null>(null);
 
   const handleCreate = async (data: any) => {
     await createCompra(data);
@@ -28,8 +28,8 @@ export function CompraPage() {
     }
   };
 
-  const handleEdit = (compra: Compra) => {
-    setEditingCompra(compra as Compra);
+  const handleEdit = (compra: CompraCompleta) => {
+    setEditingCompra(compra as CompraCompleta);
     setShowModal(true);
   };
 

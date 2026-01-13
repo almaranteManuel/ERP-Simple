@@ -5,9 +5,6 @@ export class ProductoService {
   async getAll(): Promise<Producto[]> {
     try {
       return await prisma.producto.findMany({
-        include: {
-          proveedor: true,
-        },
         orderBy: {
           codigo: 'asc',
         },
@@ -22,9 +19,6 @@ export class ProductoService {
     try {
       return await prisma.producto.findUnique({
         where: { id },
-        include: {
-          proveedor: true,
-        },
       });
     } catch (error) {
       console.error('Error al obtener producto:', error);
@@ -33,20 +27,21 @@ export class ProductoService {
   }
 
   async create(data: {
-    codigo: string;
-    descripcion?: string;
-    precio: number;
-    precio_propio?: number;
-    stock: number;
-    variante?: number;
-    proveedorId?: number;
+      nombre: string;
+      descripcion?: string;
+      codigo?: string;
+      codigoBarras?: string;
+      precio: number;
+      stock: number;
+      stockMinimo: number;
+      categoria?: string;
+      imagen?: string;
+      activo: boolean;
+      variante?: number;
   }): Promise<Producto> {
     try {
       return await prisma.producto.create({
         data,
-        include: {
-          proveedor: true,
-        },
       });
     } catch (error) {
       console.error('Error al crear producto:', error);
@@ -57,22 +52,23 @@ export class ProductoService {
   async update(
     id: number,
     data: {
-      codigo?: string;
+      nombre: string;
       descripcion?: string;
-      precio?: number;
-      precio_propio?: number;
-      stock?: number;
+      codigo?: string;
+      codigoBarras?: string;
+      precio: number;
+      stock: number;
+      stockMinimo: number;
+      categoria?: string;
+      imagen?: string;
+      activo: boolean;
       variante?: number;
-      proveedorId?: number;
     }
   ): Promise<Producto> {
     try {
       return await prisma.producto.update({
         where: { id },
         data,
-        include: {
-          proveedor: true,
-        },
       });
     } catch (error) {
       console.error('Error al actualizar producto:', error);
@@ -99,9 +95,6 @@ export class ProductoService {
             contains: query,
           },
         },
-        include: {
-          proveedor: true,
-        },
       });
     } catch (error) {
       console.error('Error al buscar productos:', error);
@@ -109,7 +102,7 @@ export class ProductoService {
     }
   }
 
-  async getLowStock(): Promise<Producto[]> {
+  async getLowStock(): Promise<any> {
     try {
       // Para SQLite, necesitas traer todos y filtrar en memoria
       // O usar un valor fijo como umbral
@@ -119,14 +112,78 @@ export class ProductoService {
             lte: 10, // Umbral fijo de 10 unidades
           },
         },
-        include: {
-          proveedor: true,
-        },
       });
       return products;
     } catch (error) {
       console.error('Error al obtener productos con stock bajo:', error);
       throw new Error('No se pudieron cargar los productos con stock bajo');
+    }
+  }
+
+  // En ProductoService
+  async getByBarcode(barcode: string): Promise<Producto | null> {
+    try {
+      // Buscar por código de barras O código normal
+      return await prisma.producto.findFirst({
+        where: {
+          OR: [
+            { codigoBarras: barcode },
+            { codigo: barcode }
+          ],
+          activo: true
+        }
+      });
+    } catch (error) {
+      console.error('Error al buscar producto por código:', error);
+      throw new Error('No se pudo buscar el producto');
+    }
+  }
+
+  async getByCodigo(codigo: string): Promise<Producto | null> {
+    try {
+      return await prisma.producto.findFirst({
+        where: {
+          codigo: codigo,
+        },
+      });
+    } catch (error) {
+      console.error('Error al buscar producto por código:', error);
+      throw new Error('No se pudo buscar el producto');
+    }
+  }
+
+  // En ProductoService - agregar búsqueda mejorada
+  async search(searchTerm: string): Promise<Producto | null> {
+    try {
+      return await prisma.producto.findFirst({
+        where: {
+          OR: [
+            { codigoBarras: searchTerm },
+            { codigo: searchTerm },
+            {
+              nombre: {
+                contains: searchTerm,
+                mode: 'insensitive'
+              }
+            }
+          ],
+          activo: true
+        },
+        // Solo traer los campos necesarios
+        select: {
+          id: true,
+          nombre: true,
+          descripcion: true,
+          precio: true,
+          stock: true,
+          activo: true,
+          codigoBarras: true,
+          codigo: true
+        }
+      });
+    } catch (error) {
+      console.error('Error en búsqueda de producto:', error);
+      throw new Error('Error en búsqueda');
     }
   }
 }

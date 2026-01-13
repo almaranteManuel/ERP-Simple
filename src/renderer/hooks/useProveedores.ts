@@ -1,10 +1,9 @@
 // hooks/useProveedores.ts
 import { useState, useEffect } from 'react';
-import { Proveedor } from '../types';
-
+import { ProveedorCompleto } from '../types/api.types';
 
 export function useProveedores() {
-  const [proveedores, setProveedores] = useState<Proveedor[]>([]);
+  const [proveedores, setProveedores] = useState<ProveedorCompleto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

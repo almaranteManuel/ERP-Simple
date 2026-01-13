@@ -8,68 +8,121 @@ datasource db {
   url      = "file:./erp.db"
 }
 
-model Producto {
-  id            Int     @id @default(autoincrement())
-  codigo        String
-  descripcion   String?
-  precio        Float
-  precio_propio Float   @default(0)
-  stock         Int     @default(0)
-  variante      Float   @default(0)
+model Product {
+  id           Int     @id @default(autoincrement())
+  description  String?
+  code       String? @unique
+  codeBar String? @unique
+  price       Float
+  own_price       Float
+  stock        Int     @default(0)
+  stockMin  Int     @default(0)
+  category    String?
+  image       String?
+  is_active       Boolean @default(true)
+  variant     Float @default(0)
+  supplierId  Int?
 
-  proveedorId Int?
-  proveedor   Proveedor? @relation(fields: [proveedorId], references: [id])
-
-  ventas Venta[]
+  supplier   Supplier?   @relation(fields: [supplierId], references: [id])
+  saleItems  VentaItem[]
+  purchaseItems CompraItem[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Proveedor {
+model Supplier {
   id        Int     @id @default(autoincrement())
-  nombre    String
-  telefono  String?
+  name    String
+  phone  String?
   email     String?
-  direccion String?
+  address String?
 
-  productos Producto[]
-  compras   Compra[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Compra {
-  id Int @id @default(autoincrement())
-
-  proveedorId Int
-  proveedor   Proveedor @relation(fields: [proveedorId], references: [id])
-
-  fecha DateTime @default(now())
-  total Float
+  purchases   Purchase[]
+  products Product[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Venta {
-  id    Int      @id @default(autoincrement())
-  fecha DateTime @default(now())
-  total Float
+model Purchase {
+  id            Int      @id @default(autoincrement())
+  supplierId   Int
+  date         DateTime @default(now())
+  total         Float    @default(0)
+  subtotal      Float    @default(0)
+  discount     Float    @default(0)
+  state        String   @default("completada") // completada, anulada, pendiente
+  codePurchase  String   @unique // Ej: C-20250104-001
+  details String?
 
-  productoId Int?
-  producto   Producto? @relation(fields: [productoId], references: [id])
+  supplier Supplier    @relation(fields: [supplierId], references: [id])
+  items     PurchaseItem[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Recordatorio {
+model PurchaseItem {
+  id             Int   @id @default(autoincrement())
+  purchaseId       Int
+  productId     Int
+  qty       Int
+  priceUnitary Float
+  subtotal       Float
+  discount      Float @default(0)
+
+  purchase   Purchase   @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([purchaseId])
+  @@index([productId])
+}
+
+model Sale {
+  id            Int      @id @default(autoincrement())
+  date         DateTime @default(now())
+  total         Float    @default(0)
+  subtotal      Float    @default(0)
+  discount     Float    @default(0)
+  payMethod    String   @default("efectivo")
+  state        String   @default("completada")
+  codeSale   String   @unique
+  details String?
+
+  items SaleItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SaleItem {
+  id             Int   @id @default(autoincrement())
+  saleId         Int
+  productId      Int
+  qty            Int
+  priceUnitary   Float
+  subtotal       Float
+  discount       Float @default(0)
+
+  sale    Sale    @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([saleId])
+  @@index([productId])
+}
+
+model Reminder {
   id          Int      @id @default(autoincrement())
-  descripcion String?
-  fecha       DateTime
-  completado  Boolean  @default(false)
+  description String?
+  date       DateTime
+  is_completed  Boolean  @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

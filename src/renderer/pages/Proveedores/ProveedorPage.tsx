@@ -1,13 +1,13 @@
 // pages/ProveedorPage.tsx
 import React, { useState } from 'react';
-import { Proveedor } from '../../types/index';
 import { useProveedores } from '../../hooks/useProveedores';
 import { ProveedorModal } from './ProveedorModal';
+import { ProveedorCompleto } from '../../types/api.types';
 
 export function ProveedorPage() {
   const { proveedores, loading, createProveedor, updateProveedor, deleteProveedor, refresh } = useProveedores();
   const [showModal, setShowModal] = useState(false);
-  const [editingProveedor, setEditingProveedor] = useState<Proveedor | null>(null);
+  const [editingProveedor, setEditingProveedor] = useState<ProveedorCompleto | null>(null);
 
   const handleCreate = async (data: any) => {
     await createProveedor(data);
@@ -28,8 +28,8 @@ export function ProveedorPage() {
     }
   };
 
-  const handleEdit = (proveedor: Proveedor) => {
-    setEditingProveedor(proveedor as Proveedor);
+  const handleEdit = (proveedor: ProveedorCompleto) => {
+    setEditingProveedor(proveedor as ProveedorCompleto);
     setShowModal(true);
   };
 

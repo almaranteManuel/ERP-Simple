@@ -9,8 +9,11 @@ contextBridge.exposeInMainWorld('api', {
     create: (data: any) => ipcRenderer.invoke('producto:create', data),
     update: (id: number, data: any) => ipcRenderer.invoke('producto:update', id, data),
     delete: (id: number) => ipcRenderer.invoke('producto:delete', id),
-    search: (query: string) => ipcRenderer.invoke('producto:search', query),
+    searchByCode: (query: string) => ipcRenderer.invoke('producto:searchByCode', query),
     getLowStock: () => ipcRenderer.invoke('producto:getLowStock'),
+    getByBarcode: (barcode: string) => ipcRenderer.invoke('producto:getByBarcode', barcode),
+    getByCodigo: (codigo: string) => ipcRenderer.invoke('producto:getByCodigo', codigo),
+    search: (query: string) => ipcRenderer.invoke('producto:search', query),
   },
   // Proveedores
   proveedor: {

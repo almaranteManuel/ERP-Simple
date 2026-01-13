@@ -73,4 +73,23 @@ export function registerProductoHandlers() {
       throw error;
     }
   });
+
+  ipcMain.handle('producto:getByBarcode', async (_, barcode: string) => {
+    // Necesitas implementar este método en ProductoService
+    return await productoService.getByBarcode(barcode);
+  });
+
+  ipcMain.handle('producto:getByCodigo', async (_, codigo: string) => {
+    // Método para buscar por código interno
+    return await productoService.getByCodigo(codigo);
+  });
+
+  ipcMain.handle('producto:search', async (_, query: string) => {
+    try {
+      return await productoService.search(query);
+    } catch (error) {
+      console.error('Error en producto:search', error);
+      throw error;
+    }
+  });
 }

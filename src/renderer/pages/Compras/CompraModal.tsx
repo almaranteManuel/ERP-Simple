@@ -1,13 +1,13 @@
 // components/modals/ProductoModal.tsx
 import React, { useEffect, useState } from 'react';
 import { useCompras } from '../../hooks/useCompras';
-import { Compra } from '../../types/index';
+import { CompraCompleta } from '../../types/api.types';
 
 interface CompraModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (data: any) => Promise<void>;
-  initialData?: Compra | null;
+  initialData?: CompraCompleta | null;
 }
 
 export function CompraModal({ isOpen, onClose, onSubmit, initialData }: CompraModalProps) {

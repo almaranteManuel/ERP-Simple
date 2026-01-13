@@ -1,13 +1,13 @@
 // components/modals/ProductoModal.tsx
 import React, { useEffect, useState } from 'react';
 import { useVentas } from '../../hooks/useVentas';
-import { Venta } from '../../types/index';
+import { CreateVentaDTO } from '../../types/api.types';
 
 interface VentaModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (data: any) => Promise<void>;
-  initialData?: Venta | null;
+  initialData?: CreateVentaDTO | null;
 }
 
 export function VentaModal({ isOpen, onClose, onSubmit, initialData }: VentaModalProps) {
