@@ -1,13 +1,13 @@
-import { registerProductoHandlers } from './productoHandlers';
-import { registerProveedorHandlers } from './proveedorHandlers';
-import { registerVentaHandlers } from './ventaHandlers';
-import { registerCompraHandlers } from './compraHandlers';
+import { registerProductHandlers } from './productHandlers';
+import { registerSupplierHandlers } from './supplierHandlers';
+import { registerVentaHandlers } from './saleHandlers';
+import { registerPurchaseHandlers } from './purchaseHandlers';
 // etc...
 
 export function registerAllHandlers() {
-  registerProductoHandlers();
-  registerProveedorHandlers();
+  registerProductHandlers();
+  registerSupplierHandlers();
   registerVentaHandlers();
-  registerCompraHandlers();
+  registerPurchaseHandlers();
   // registerRecordatorioHandlers();
 }

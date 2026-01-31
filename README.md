@@ -1,8 +1,30 @@
 # ERP Simple - Electron + React + Prisma + SQLite
 
-Sistema de gestión empresarial (ERP) simple para manejo de productos, proveedores, compras, ventas y recordatorios.
+## Contexto
+# Sistema de gestión empresarial (ERP) simple para manejo de productos, proveedores, compras, ventas y recordatorios.
 
-## 🚀 Tecnologías
+# Se necesitaba una herramienta liviana para gestionar inventario y operaciones comerciales a nivel local (sin servidor) en una Ferretería, con interfaz simple y flujo CRUD para entidades principales.
+
+
+## Proceso
+
+# Elegí realizar la interfaz con React + Tailwind para acelerar creación de componentes reutilizables y por ser las tecnologías que más domino.
+
+# Opté por Prisma + SQLite ya que se quería algo local, y además por simplicidad en despliegue (fácil backup y portable).
+
+# Usé IPC para exponer servicios desde el proceso principal al renderer (seguridad y separación de responsabilidades).
+
+# Solución utilizable por pequeñas tiendas o para gestión local de inventario.
+
+
+## Resultado
+# Reducción de fricción en tareas de registro de compras/ventas y consulta de stock.
+
+# Las métricas permiten que el negocio tome mejores decisiones.
+
+# Unificamos servicios en una sola aplicación de escritorio, facilidad y comodidad. Más que un gasto es una inversión.
+
+## Tecnologías
 
 - **Electron** - Framework para aplicaciones de escritorio
 - **React** - Biblioteca de UI
@@ -14,14 +36,14 @@ Sistema de gestión empresarial (ERP) simple para manejo de productos, proveedor
 
 ---
 
-## 📋 Requisitos Previos
+## Requisitos Previos
 
 - Node.js 16+ 
 - npm o yarn
 
 ---
 
-## ⚙️ Instalación Inicial
+## Instalación Inicial
 
 ```bash
 # 1. Clonar el repositorio
@@ -43,7 +65,7 @@ npx prisma studio
 
 ---
 
-## 🏃 Comandos de Desarrollo
+## Comandos de Desarrollo
 
 ### Desarrollo Local
 
@@ -79,7 +101,7 @@ npm run make
 
 ---
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 mi-erp/
@@ -90,14 +112,14 @@ mi-erp/
 │   │   ├── database/
 │   │   │   └── prisma.ts         # Cliente de Prisma
 │   │   ├── services/             # Lógica de negocio
-│   │   │   ├── ProductoService.ts
-│   │   │   ├── ProveedorService.ts
-│   │   │   ├── CompraService.ts
-│   │   │   ├── VentaService.ts
-│   │   │   └── RecordatorioService.ts
+│   │   │   ├── ProductService.ts
+│   │   │   ├── SupplierService.ts
+│   │   │   ├── PurchaseService.ts
+│   │   │   ├── SaleService.ts
+│   │   │   └── ReminderService.ts
 │   │   └── ipc/                  # Handlers de comunicación IPC
 │   │       ├── handlers.ts
-│   │       ├── productoHandlers.ts
+│   │       ├── productHandlers.ts
 │   │       └── ...
 │   │
 │   └── renderer/                  # Proceso de renderizado (React)
@@ -109,13 +131,13 @@ mi-erp/
 │       ├── api/
 │       │   └── ipc.ts            # Cliente IPC
 │       ├── hooks/                # Custom hooks
-│       │   └── useProductos.ts
+│       │   └── useProducts.ts
 │       ├── pages/                # Páginas principales
-│       │   ├── Productos/
-│       │   ├── Proveedores/
-│       │   ├── Compras/
-│       │   ├── Ventas/
-│       │   └── Recordatorios/
+│       │   ├── Products/
+│       │   ├── Proveedors/
+│       │   ├── Purchases/
+│       │   ├── Sales/
+│       │   └── Reminders/
 │       └── components/           # Componentes reutilizables
 │           ├── Layout/
 │           └── ui/
@@ -128,205 +150,7 @@ mi-erp/
 
 ---
 
-## 🔄 Flujo de Trabajo para Nuevas Funcionalidades
-
-### 1. Modificar la Base de Datos (si es necesario)
-
-```bash
-# Editar prisma/schema.prisma
-# Luego aplicar cambios:
-npx prisma generate
-npx prisma db push
-```
-
-### 2. Crear el Service (Backend)
-
-Crear archivo en `src/main/services/NuevoModuloService.ts`:
-
-```typescript
-import prisma from '../database/prisma';
-
-export class NuevoModuloService {
-  async getAll() {
-    return await prisma.nuevoModulo.findMany();
-  }
-  
-  async create(data: any) {
-    return await prisma.nuevoModulo.create({ data });
-  }
-  
-  // ... más métodos
-}
-```
-
-### 3. Crear IPC Handlers
-
-Crear archivo en `src/main/ipc/nuevoModuloHandlers.ts`:
-
-```typescript
-import { ipcMain } from 'electron';
-import { NuevoModuloService } from '../services/NuevoModuloService';
-
-const service = new NuevoModuloService();
-
-export function registerNuevoModuloHandlers() {
-  ipcMain.handle('nuevoModulo:getAll', async () => {
-    return await service.getAll();
-  });
-  
-  // ... más handlers
-}
-```
-
-### 4. Registrar Handlers
-
-En `src/main/ipc/handlers.ts`:
-
-```typescript
-import { registerNuevoModuloHandlers } from './nuevoModuloHandlers';
-
-export function registerAllHandlers() {
-  registerProductoHandlers();
-  registerNuevoModuloHandlers(); // ← Agregar aquí
-  // ...
-}
-```
-
-### 5. Exponer API en Preload
-
-En `src/main/preload.ts`:
-
-```typescript
-contextBridge.exposeInMainWorld('api', {
-  producto: { /* ... */ },
-  nuevoModulo: {
-    getAll: () => ipcRenderer.invoke('nuevoModulo:getAll'),
-    create: (data: any) => ipcRenderer.invoke('nuevoModulo:create', data),
-    // ...
-  },
-});
-```
-
-### 6. Crear Tipos (Frontend)
-
-En `src/renderer/types/api.types.ts`:
-
-```typescript
-export interface NuevoModulo {
-  id: number;
-  nombre: string;
-  // ...
-}
-
-// Actualizar el global Window
-declare global {
-  interface Window {
-    api: {
-      nuevoModulo: {
-        getAll: () => Promise<NuevoModulo[]>;
-        // ...
-      };
-    };
-  }
-}
-```
-
-### 7. Crear Hook de React
-
-Crear `src/renderer/hooks/useNuevoModulo.ts`:
-
-```typescript
-import { useState, useEffect } from 'react';
-
-export function useNuevoModulo() {
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  const loadItems = async () => {
-    setLoading(true);
-    try {
-      const data = await window.api.nuevoModulo.getAll();
-      setItems(data);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadItems();
-  }, []);
-
-  return { items, loading, loadItems };
-}
-```
-
-### 8. Crear Página de React
-
-Crear `src/renderer/pages/NuevoModulo/NuevoModuloPage.tsx`:
-
-```typescript
-import React from 'react';
-import { useNuevoModulo } from '../../hooks/useNuevoModulo';
-
-export function NuevoModuloPage() {
-  const { items, loading } = useNuevoModulo();
-
-  if (loading) return <div>Cargando...</div>;
-
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Nuevo Módulo</h1>
-      {/* Tu UI aquí */}
-    </div>
-  );
-}
-```
-
-### 9. Probar
-
-```bash
-npm start
-```
-
----
-
-## 🐛 Solución de Problemas Comunes
-
-### Error: "Module '@prisma/client' has no exported member 'PrismaClient'"
-
-```bash
-npx prisma generate
-# Reiniciar VS Code: Ctrl+Shift+P > "TypeScript: Restart TS Server"
-```
-
-### Error: "Cannot find module './preload.js'"
-
-Verifica que `forge.config.ts` tenga configurado correctamente el preload:
-
-```typescript
-preload: {
-  js: './src/main/preload.ts',
-}
-```
-
-### Error de compilación de TypeScript
-
-```bash
-# Asegúrate de tener jsx configurado en tsconfig.json
-"jsx": "react"
-```
-
-### La app no inicia después de cambios
-
-```bash
-# Limpia y reconstruye
-rm -rf .webpack
-npm start
-```
-
----
-
-## 📝 Checklist para Nuevas Features
+## Checklist para Nuevas Features
 
 - [ ] Modificar `schema.prisma` (si aplica)
 - [ ] Ejecutar `npx prisma generate && npx prisma db push`
@@ -341,7 +165,7 @@ npm start
 
 ---
 
-## 🎯 Próximas Funcionalidades a Implementar
+## Próximas Funcionalidades a Implementar
 
 - [ ] **Proveedores**: CRUD completo
 - [ ] **Compras**: Registro de compras con detalles
@@ -354,31 +178,12 @@ npm start
 
 ---
 
-## 📦 Versiones
-
-- **Prisma**: 5.x
-- **Electron**: Compatible con Electron Forge
-- **React**: 18+
-- **TypeScript**: 5+
-
----
-
-## 🤝 Contribuir
-
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`)
-3. Commit tus cambios (`git commit -m 'Agregar nueva funcionalidad'`)
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Abre un Pull Request
-
----
-
-## 📄 Licencia
+## Licencia
 
 Este proyecto está bajo la Licencia MIT.
 
 ---
 
-## 👥 Autor
+## Autor
 
-Tu Nombre - [GitHub](https://github.com/tu-usuario)
+Almarante Manuel - [GitHub](https://github.com/almaranteManuel)

@@ -5,125 +5,70 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./erp.db"
+  url      = env("DATABASE_URL")
 }
 
 model Product {
-  id           Int     @id @default(autoincrement())
-  description  String?
-  code       String? @unique
-  codeBar String? @unique
-  price       Float
-  own_price       Float
-  stock        Int     @default(0)
-  stockMin  Int     @default(0)
-  category    String?
-  image       String?
-  is_active       Boolean @default(true)
-  variant     Float @default(0)
-  supplierId  Int?
+  id          Int         @id @default(autoincrement())
+  code        String
+  description String?
+  price       Decimal?
+  own_price   String?
+  variant     Decimal     @default(1.70)
+  category_id Int?
+  stock       Int?
+  created_at  String?
+  updated_at  String?
+  categories  categories? @relation(fields: [category_id], references: [id], onDelete: Cascade)
 
-  supplier   Supplier?   @relation(fields: [supplierId], references: [id])
-  saleItems  VentaItem[]
-  purchaseItems CompraItem[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  @@map("products")
 }
 
 model Supplier {
-  id        Int     @id @default(autoincrement())
-  name    String
-  phone  String?
-  email     String?
-  address String?
+  id         Int     @id @default(autoincrement())
+  name       String
+  email      String?
+  phone      String?
+  address    String?
+  created_at String?
+  updated_at String?
 
-  purchases   Purchase[]
-  products Product[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  @@map("suppliers")
 }
 
 model Purchase {
-  id            Int      @id @default(autoincrement())
-  supplierId   Int
-  date         DateTime @default(now())
-  total         Float    @default(0)
-  subtotal      Float    @default(0)
-  discount     Float    @default(0)
-  state        String   @default("completada") // completada, anulada, pendiente
-  codePurchase  String   @unique // Ej: C-20250104-001
-  details String?
+  id          Int      @id @default(autoincrement())
+  date        DateTime
+  totalAmount Decimal
+  created_at  String?
+  updated_at  String?
+  supplier_id Int?
 
-  supplier Supplier    @relation(fields: [supplierId], references: [id])
-  items     PurchaseItem[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model PurchaseItem {
-  id             Int   @id @default(autoincrement())
-  purchaseId       Int
-  productId     Int
-  qty       Int
-  priceUnitary Float
-  subtotal       Float
-  discount      Float @default(0)
-
-  purchase   Purchase   @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([purchaseId])
-  @@index([productId])
+  @@map("purchases")
 }
 
 model Sale {
-  id            Int      @id @default(autoincrement())
-  date         DateTime @default(now())
-  total         Float    @default(0)
-  subtotal      Float    @default(0)
-  discount     Float    @default(0)
-  payMethod    String   @default("efectivo")
-  state        String   @default("completada")
-  codeSale   String   @unique
-  details String?
+  id          Int      @id @default(autoincrement())
+  date        DateTime
+  totalAmount Decimal
+  created_at  String?
+  updated_at  String?
 
-  items SaleItem[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model SaleItem {
-  id             Int   @id @default(autoincrement())
-  saleId         Int
-  productId      Int
-  qty            Int
-  priceUnitary   Float
-  subtotal       Float
-  discount       Float @default(0)
-
-  sale    Sale    @relation(fields: [saleId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([saleId])
-  @@index([productId])
+  @@map("sales")
 }
 
 model Reminder {
-  id          Int      @id @default(autoincrement())
+  id          Int                        @id @default(autoincrement())
   description String?
-  date       DateTime
-  is_completed  Boolean  @default(false)
+  completed   Unsupported("tinyint(1)")? @default(dbgenerated("0"))
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  @@map("reminders")
+}
+
+model categories {
+  id         Int       @id @default(autoincrement())
+  name       String
+  created_at String?
+  updated_at String?
+  products   Product[]
 }

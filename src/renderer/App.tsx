@@ -2,10 +2,10 @@
 import React from 'react';
 import { Routes, Route, HashRouter } from 'react-router-dom';
 import Sidebar from './components/Layout/Sidebar';
-import { ProductosPage } from './pages/Productos/ProductosPage';
-import { ProveedorPage } from './pages/Proveedores/ProveedorPage';
-import { CompraPage } from './pages/Compras/CompraPage';
-import { PuntoVenta } from './pages/Ventas/PuntoVenta';
+import { ProductsPage } from './pages/Products/ProductsPage';
+import { PuntoVenta } from './pages/Sales/PuntoVenta';
+import { SupplierPage } from './pages/Proveedores/SupplierPage';
+import { PurchasePage } from './pages/Purchases/PurchasePage';
 
 function App() {
   return (
@@ -14,10 +14,10 @@ function App() {
         <Sidebar />
         <main className="flex-1 overflow-auto"> {/* Cambia p-6 por overflow-auto */}
           <Routes>
-            <Route path="/productos" element={<ProductosPage />} />
-            <Route path="/proveedores" element={<ProveedorPage />} />
+            <Route path="/products" element={<ProductsPage />} />
+            <Route path="/Suppliers" element={<SupplierPage />} />
             <Route path="/ventas" element={<PuntoVenta />} />
-            <Route path="/compras" element={<CompraPage />} />
+            <Route path="/purchases" element={<PurchasePage />} />
             {/* Agrega una ruta por defecto */}
             <Route path="/" element={
               <div className="p-6">

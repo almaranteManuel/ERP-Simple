@@ -2,48 +2,47 @@ import { contextBridge, ipcRenderer } from 'electron';
 
 // Exponer API segura al renderer
 contextBridge.exposeInMainWorld('api', {
-  // Productos
-  producto: {
-    getAll: () => ipcRenderer.invoke('producto:getAll'),
-    getById: (id: number) => ipcRenderer.invoke('producto:getById', id),
-    create: (data: any) => ipcRenderer.invoke('producto:create', data),
-    update: (id: number, data: any) => ipcRenderer.invoke('producto:update', id, data),
-    delete: (id: number) => ipcRenderer.invoke('producto:delete', id),
-    searchByCode: (query: string) => ipcRenderer.invoke('producto:searchByCode', query),
-    getLowStock: () => ipcRenderer.invoke('producto:getLowStock'),
-    getByBarcode: (barcode: string) => ipcRenderer.invoke('producto:getByBarcode', barcode),
-    getByCodigo: (codigo: string) => ipcRenderer.invoke('producto:getByCodigo', codigo),
-    search: (query: string) => ipcRenderer.invoke('producto:search', query),
+  // Products
+  product: {
+    getAll: () => ipcRenderer.invoke('product:getAll'),
+    getById: (id: number) => ipcRenderer.invoke('product:getById', id),
+    create: (data: any) => ipcRenderer.invoke('product:create', data),
+    update: (id: number, data: any) => ipcRenderer.invoke('product:update', id, data),
+    delete: (id: number) => ipcRenderer.invoke('product:delete', id),
+    searchByCode: (query: string) => ipcRenderer.invoke('product:searchByCode', query),
+    getLowStock: () => ipcRenderer.invoke('product:getLowStock'),
+    getByBarcode: (barcode: string) => ipcRenderer.invoke('product:getByBarcode', barcode),
+    getByCodigo: (codigo: string) => ipcRenderer.invoke('product:getByCodigo', codigo),
+    search: (query: string) => ipcRenderer.invoke('product:search', query),
+    findOneByBarcode: (barcode: string) => ipcRenderer.invoke('product:findOneByBarcode', barcode),
   },
-  // Proveedores
-  proveedor: {
-    getAll: () => ipcRenderer.invoke('proveedor:getAll'),
-    getById: (id: number) => ipcRenderer.invoke('proveedor:getById', id),
-    create: (data: any) => ipcRenderer.invoke('proveedor:create', data),
-    update: (id: number, data: any) => ipcRenderer.invoke('proveedor:update', id, data),
-    delete: (id: number) => ipcRenderer.invoke('proveedor:delete', id),
-    search: (query: string) => ipcRenderer.invoke('proveedor:search', query),
+  // Suppliers
+  supplier: {
+    getAll: () => ipcRenderer.invoke('supplier:getAll'),
+    getById: (id: number) => ipcRenderer.invoke('supplier:getById', id),
+    create: (data: any) => ipcRenderer.invoke('supplier:create', data),
+    update: (id: number, data: any) => ipcRenderer.invoke('supplier:update', id, data),
+    delete: (id: number) => ipcRenderer.invoke('supplier:delete', id),
+    search: (query: string) => ipcRenderer.invoke('supplier:search', query),
   },
   // Ventas
-  venta: {
-    getAll: () => ipcRenderer.invoke('venta:getAll'),
-    getById: (id: number) => ipcRenderer.invoke('venta:getById', id),
-    create: (data: any) => ipcRenderer.invoke('venta:create', data),
-    update: (id: number, data: any) => ipcRenderer.invoke('venta:update', id, data),
-    delete: (id: number) => ipcRenderer.invoke('venta:delete', id),
+  sale: {
+    getAll: () => ipcRenderer.invoke('sale:getAll'),
+    getById: (id: number) => ipcRenderer.invoke('sale:getById', id),
+    create: (data: any) => ipcRenderer.invoke('sale:create', data),
+    update: (id: number, data: any) => ipcRenderer.invoke('sale:update', id, data),
+    delete: (id: number) => ipcRenderer.invoke('sale:delete', id),
   },
-  // Compras
-  compra: {
-    getAll: () => ipcRenderer.invoke('compra:getAll'),
-    getById: (id: number) => ipcRenderer.invoke('compra:getById', id),
-    create: (data: any) => ipcRenderer.invoke('compra:create', data),
-    update: (id: number, data: any) => ipcRenderer.invoke('compra:update', id, data),
-    delete: (id: number) => ipcRenderer.invoke('compra:delete', id),
+  // Purchases
+  purchase: {
+    getAll: () => ipcRenderer.invoke('purchase:getAll'),
+    getById: (id: number) => ipcRenderer.invoke('purchase:getById', id),
+    create: (data: any) => ipcRenderer.invoke('purchase:create', data),
+    update: (id: number, data: any) => ipcRenderer.invoke('purchase:update', id, data),
+    delete: (id: number) => ipcRenderer.invoke('purchase:delete', id),
   },
   
   // Agregar otros módulos aquí cuando los implementes
-  // proveedor: { ... },
-  // compra: { ... },
   // venta: { ... },
   // recordatorio: { ... },
 });

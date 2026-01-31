@@ -22,7 +22,7 @@ const Sidebar: React.FC = () => {
         </Link>
         
         <Link 
-          to="/productos" 
+          to="/products" 
           className="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
         >
           <span className="mr-3"><RocketLaunchIcon className="size-6 text-blue-500" /></span>
@@ -30,7 +30,7 @@ const Sidebar: React.FC = () => {
         </Link>
 
         <Link 
-          to="/proveedores" 
+          to="/suppliers" 
           className="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
         >
           <span className="mr-3"><TruckIcon className="size-6 text-blue-500" /></span>
@@ -46,7 +46,7 @@ const Sidebar: React.FC = () => {
         </Link>
 
         <Link 
-          to="/compras" 
+          to="/purchases" 
           className="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
         >
           <span className="mr-3"><WalletIcon className="size-6 text-blue-500" /></span>
